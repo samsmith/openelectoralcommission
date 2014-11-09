@@ -35,7 +35,7 @@ module Jekyll
     
     def to_slug(s)
         #strip the string
-        ret = s.strip
+        ret = s.strip.downcase
 
         #blow away apostrophes
         ret.gsub! /['`]/,""
