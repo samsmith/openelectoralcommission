@@ -202,3 +202,22 @@ pre {
         }
     }
 }
+
+
+dt {
+    font-weight:bold;
+}
+
+dd {
+    margin-left:1em;
+}
+
+.emblems {
+    overflow:auto;
+    clear:both;
+
+    figure {
+        max-width:300px;
+        float:left;
+    }
+}

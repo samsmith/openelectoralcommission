@@ -3,3 +3,111 @@ layout: default
 title: {{ page.party.party_name }}
 ---
 <h1>{{ page.party.party_name }}</h1>
+
+{% if page.party.alternative_names != empty %}
+<p>Also known as <strong>{{ page.party.alternative_names|join:"," }}</strong></p>
+{% endif %}
+
+<dl>
+    <dt>Party ID</dt>
+    <dd>{{ page.party.party_id }}</dd>
+
+    <dt>Status</dt>
+    <dd>{{ page.party.status }}</dd>
+    
+    <dt>Party address</dt>
+    <dd>{{ page.party.party_address|newline_to_br }}</dd>
+
+    <dt>Postcode</dt>
+    <dd><a href="https://maps.google.co.uk/maps?q={{ page.party.postcode }}">{{ page.party.postcode }}</a></dd>
+
+    <dt>Registered on</dt>
+    <dd><time datetime="{{ page.party.registered_date|date:"%Y-%m-%d" }}">
+        {{ page.party.registered_date|date:"%Y-%m-%d" }}
+    </time></dd>
+
+    {% if page.party.email != empty %}
+    <dt>Party email</dt>
+    <dd>{{ page.party.email }}</dd>
+    {% endif %}
+
+    {% if page.party.campaigns_officer %}
+    <dt>Party leader</dt>
+    <dd>{{ page.party.party_leader }}</dd>
+    {% endif %}
+
+    {% if page.party.campaigns_officer and page.party.campaigns_officer != "None"%}
+    <dt>Campaigns officer</dt>
+    <dd>{{ page.party.campaigns_officer }}</dd>
+    {% endif %}
+
+    {% if page.party.nominating_officer %}
+    <dt>Nominating Officer</dt>
+    <dd>{{ page.party.nominating_officer }}</dd>
+    {% endif %}
+
+    {% if page.party.treasurer %}
+    <dt>Treasurer</dt>
+    <dd>{{ page.party.treasurer }}</dd>
+    {% endif %}
+
+    {% if page.party.financial_year_end %}
+    <dt>Financial Year End</dt>
+    <dd>{{ page.party.financial_year_end }}</dd>
+    {% endif %}
+
+    {% if page.party.register %}
+    <dt>Register</dt>
+    <dd>{{ page.party.register }}</dd>
+    {% endif %}
+    
+    {% if page.party.other_officers != empty %}
+    <dt>Other officers</dt>
+    <dd>
+        <dl>
+            {% for officer in page.party.other_officers %}
+            <dt>
+                {% if officer.deputy_additional_officer %}
+                Deputy Additional Officer
+                {% endif %}
+                {% if officer.deputy_nominating_officer %}
+                Deputy Nominating Officer
+                {% endif %}
+                {% if officer.deputy_campaigns_officer %}
+                Deputy Campaigns Officer
+                {% endif %}
+                {% if officer.deputy_treasurer %}
+                Deputy Treasurer
+                {% endif %}
+            </dt>
+            <dd>
+                {{ officer.name }}
+            </dd>
+            {% endfor %}
+        </dl>
+    </dd>
+    {% endif %}
+    
+    {% if page.party.emblems != empty %}
+    <dt>Emblems</dt>
+    <dd class="emblems">
+        {% for emblem in page.party.emblems %}
+        <figure>
+            <img src="/party_images/{{ emblem.image|split:"/"|last }}">
+            <figcaption>{{ emblem.id }}: {{ emblem.description }}</figcaption>
+        </figure>
+        {% endfor %}
+    </dd>
+    {% endif %}
+</dl>
+
+
+<p><a href="data.json">Get the data</a></p>
+
+
+
+
+
+<code>
+{{ page.party}}    
+</code>

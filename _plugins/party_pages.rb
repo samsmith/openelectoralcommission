@@ -15,6 +15,20 @@ module Jekyll
     end
   end
 
+  class JSONPartyIndexPage < Page
+    def initialize(site, base, dir, party)
+      @site = site
+      @base = base
+      @dir = dir
+
+      @name = 'index.json'
+      self.process(@name)
+      self.read_yaml(File.join(base), 'parties.json')
+      self.data['party'] = party
+
+    end
+  end
+
   class JSONPartyPage < Page
     def initialize(site, base, dir, party)
       @site = site
@@ -37,15 +51,16 @@ module Jekyll
         #strip the string
         ret = s.strip.downcase
 
+        ret.gsub! /'s/, "-s"
         #blow away apostrophes
-        ret.gsub! /['`]/,""
+        ret.gsub! /[`]/,""
 
         # @ --> at, and & --> and
         ret.gsub! /\s*@\s*/, " at "
         ret.gsub! /\s*&\s*/, " and "
 
         #replace all non alphanumeric, underscore or periods with underscore
-         ret.gsub! /\s*[^A-Za-z0-9\.\-]\s*/, '-'  
+         ret.gsub! /\s*[^A-Za-z0-9\-]\s*/, '-'
 
          #convert double underscores to single
          ret.gsub! /-+/,"-"
@@ -59,10 +74,11 @@ module Jekyll
     def generate(site)
       if site.layouts.key? 'party'
         dir = 'parties/'
+        site.pages << JSONPartyIndexPage.new(site, site.source, File.join(dir), site.data['parties'])
         site.data['parties'].each do |party|
           party_name = to_slug party['party_name']
-          site.pages << PartyPage.new(site, site.source, File.join(dir, party_name), party)
-          site.pages << JSONPartyPage.new(site, site.source, File.join(dir, party_name), party)
+          site.pages << PartyPage.new(site, site.source, File.join(dir, party['party_id'], party_name), party)
+          site.pages << JSONPartyPage.new(site, site.source, File.join(dir, party['party_id'], party_name), party)
         end
       end
     end
